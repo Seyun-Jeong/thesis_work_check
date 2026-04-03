@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.eggs/
+*.so
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Data files (likely too large for GitHub)
+*.h5ad
+*.h5
+*.csv
+*.tsv
+*.parquet
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# Logs and outputs
+*.log
+benchmark_results/
