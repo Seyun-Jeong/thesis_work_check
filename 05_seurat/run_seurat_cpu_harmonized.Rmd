@@ -1,0 +1,463 @@
+---
+title: "Seurat CPU Harmonized Benchmark"
+author: "Edgar (Seyun) Jeong"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# Seurat CPU Harmonized Pipeline
+
+This notebook is intentionally written to minimize *avoidable* divergence from
+the Scanpy / rapids-singlecell reference while staying inside Seurat's API.
+
+**Key differences that remain even here:**
+
+1. Seurat still requires scaled data before RunPCA on selected features.
+2. Seurat's Leiden wrapper exposes `n.start` / `n.iter` semantics that are not
+   the same as Scanpy's or cuGraph's iteration parameters.
+3. Even when clustering on the NN graph instead of the usual SNN graph,
+   you are still using Seurat's graph object and Seurat's wrapper.
+
+**Key harmonization moves implemented here:**
+
+- No hidden filtering during object construction
+- Same cells and genes as the canonical allowlists
+- Exact CPU nearest-neighbor search via RANN (`nn.eps = 0`)
+- Clustering on the NN graph (not the default SNN graph)
+- Reduced DE prefiltering: `min.pct = 0`, `logfc.threshold = 0`
+
+## Setup
+
+```{r setup, message=FALSE, warning=FALSE}
+# === CHANGE THIS TO SWITCH DATASETS ===
+dataset_key <- "pbmc3k"   # or "lung65k"
+config_path <- "benchmark_config.json"
+```
+
+```{r libraries, message=FALSE, warning=FALSE}
+library(Seurat)
+library(Matrix)
+library(jsonlite)
+
+cat("Seurat version:", as.character(packageVersion("Seurat")), "\n")
+cat("SeuratObject version:", as.character(packageVersion("SeuratObject")), "\n")
+cat("Matrix version:", as.character(packageVersion("Matrix")), "\n")
+cat("R version:", paste(R.version$major, R.version$minor, sep = "."), "\n")
+```
+
+## Load Config
+
+```{r config}
+`%||%` <- function(x, y) if (is.null(x)) y else x
+
+cfg <- fromJSON(config_path, simplifyVector = TRUE)
+stopifnot(dataset_key %in% names(cfg$datasets))
+
+gcfg <- cfg$global
+dcfg <- cfg$datasets[[dataset_key]]
+
+out_prefix <- file.path("write", paste0(dcfg$pipeline_prefix, "_seurat_cpu_harmonized"))
+dir.create("write", showWarnings = FALSE, recursive = TRUE)
+
+out_paths <- list(
+  rds              = paste0(out_prefix, ".rds"),
+  clusters         = paste0(out_prefix, "_clusters.csv"),
+  markers          = paste0(out_prefix, "_markers.csv"),
+  markers_filtered = paste0(out_prefix, "_markers_filtered.csv"),
+  umap             = paste0(out_prefix, "_umap.csv"),
+  hvg              = paste0(out_prefix, "_hvg.csv"),
+  spec             = paste0(out_prefix, "_spec.json")
+)
+
+cat("Dataset          :", dcfg$name, "\n")
+cat("Raw input        :", dcfg$input_path, "\n")
+cat("Canonical cells  :", dcfg$canonical_cells_txt, "\n")
+cat("Canonical genes  :", dcfg$canonical_genes_txt, "\n")
+```
+
+## Helper Functions
+
+```{r helpers}
+read_allowlist <- function(path) {
+  x <- readLines(path, warn = FALSE)
+  x[nzchar(x)]
+}
+
+load_h5ad_counts <- function(h5ad_path) {
+  if (!requireNamespace("reticulate", quietly = TRUE)) {
+    stop("reticulate is required to read h5ad input in this script.")
+  }
+
+  reticulate::use_python(Sys.which("python"), required = FALSE)
+  anndata <- reticulate::import("anndata")
+  py <- reticulate::import_builtins()
+
+  ad <- anndata$read_h5ad(h5ad_path)
+
+  layer_keys <- tryCatch(reticulate::py_to_r(ad$layers$keys()), error = function(e) character())
+  if ("counts" %in% layer_keys) {
+    x <- ad$layers$get("counts")
+  } else {
+    x <- ad$X
+  }
+
+  # h5ad stores X as cells x genes. Seurat wants genes x cells.
+  x <- x$transpose()$tocsc()
+
+  p    <- as.integer(reticulate::py_to_r(x$indptr))
+  i    <- as.integer(reticulate::py_to_r(x$indices))
+  vals <- as.numeric(reticulate::py_to_r(x$data))
+  dims <- as.integer(reticulate::py_to_r(x$shape))
+
+  counts <- new("dgCMatrix", p = p, i = i, x = vals, Dim = dims)
+  rownames(counts) <- make.unique(as.character(reticulate::py_to_r(ad$var_names$to_list())))
+  colnames(counts) <- as.character(reticulate::py_to_r(ad$obs_names$to_list()))
+  counts
+}
+
+load_counts <- function(ds) {
+  if (ds$input_type == "10x_mtx") {
+    counts <- Read10X(data.dir = ds$input_path)
+    rownames(counts) <- make.unique(rownames(counts))
+    return(counts)
+  }
+  if (ds$input_type == "h5ad") {
+    return(load_h5ad_counts(ds$input_path))
+  }
+  stop("Unsupported input_type: ", ds$input_type)
+}
+
+subset_to_canonical <- function(counts, allow_genes, allow_cells) {
+  common_genes <- intersect(allow_genes, rownames(counts))
+  common_cells <- intersect(allow_cells, colnames(counts))
+
+  if (length(common_genes) == 0) stop("No overlapping genes between raw input and canonical gene allowlist.")
+  if (length(common_cells) == 0) stop("No overlapping cells between raw input and canonical cell allowlist.")
+
+  counts[common_genes, common_cells, drop = FALSE]
+}
+```
+
+## Load and Subset to Canonical Input
+
+```{r load_data}
+allow_cells <- read_allowlist(dcfg$canonical_cells_txt)
+allow_genes <- read_allowlist(dcfg$canonical_genes_txt)
+counts <- load_counts(dcfg)
+counts <- subset_to_canonical(counts, allow_genes, allow_cells)
+
+cat("Counts after canonical subset:", ncol(counts), "cells ×", nrow(counts), "genes\n")
+```
+
+```{r create_object}
+obj <- CreateSeuratObject(
+  counts       = counts,
+  project      = dcfg$name,
+  min.cells    = 0,    # No hidden filtering — canonical input is already filtered
+  min.features = 0
+)
+
+obj[["percent.mt"]]   <- PercentageFeatureSet(obj, pattern = "^MT-")
+obj[["percent.ribo"]] <- PercentageFeatureSet(obj, pattern = "^RP[SL]")
+obj[["percent.hb"]]   <- PercentageFeatureSet(obj, pattern = "^HB[^(P)]")
+
+cat("Seurat object:", ncol(obj), "cells ×", nrow(obj), "genes\n")
+```
+
+## Normalize
+
+```{r normalize}
+system.time({
+  obj <- NormalizeData(
+    obj,
+    normalization.method = "LogNormalize",
+    scale.factor         = gcfg$target_sum,
+    verbose              = FALSE
+  )
+})
+```
+
+## HVG Selection
+
+```{r hvg}
+system.time({
+  obj <- FindVariableFeatures(
+    obj,
+    selection.method = "vst",
+    nfeatures        = dcfg$n_top_genes,
+    verbose          = FALSE
+  )
+})
+cat("HVGs selected:", length(VariableFeatures(obj)), "\n")
+```
+
+## Scale Data
+
+**Seurat requires this before PCA. Scanpy and rsc benchmarks skip scaling.**
+This is an irreducible methodological difference.
+
+```{r scale}
+system.time({
+  obj <- ScaleData(
+    obj,
+    features = VariableFeatures(obj),
+    verbose  = FALSE
+  )
+})
+```
+
+## PCA
+
+```{r pca}
+system.time({
+  obj <- RunPCA(
+    obj,
+    features = VariableFeatures(obj),
+    npcs     = gcfg$pca_n_comps,
+    seed.use = gcfg$random_state,
+    verbose  = FALSE
+  )
+})
+```
+
+## Neighbors
+
+Uses exact RANN search (`nn.eps = 0`) instead of Annoy.
+If `graph_mode == "nn"`, clusters on the NN graph directly to reduce
+divergence from Scanpy / rapids-singlecell KNN-graph clustering.
+
+```{r neighbors}
+graph_mode <- gcfg$seurat_graph_mode
+
+system.time({
+  if (isTRUE(graph_mode == "nn")) {
+    obj <- FindNeighbors(
+      obj,
+      reduction      = "pca",
+      dims           = seq_len(dcfg$neighbors_n_pcs),
+      k.param        = dcfg$n_neighbors,
+      return.neighbor = FALSE,
+      compute.SNN    = FALSE,
+      nn.method      = gcfg$seurat_nn_method,
+      nn.eps         = gcfg$seurat_nn_eps,
+      graph.name     = "RNA_nn",
+      verbose        = FALSE
+    )
+    graph_for_clustering <- "RNA_nn"
+  } else {
+    obj <- FindNeighbors(
+      obj,
+      reduction      = "pca",
+      dims           = seq_len(dcfg$neighbors_n_pcs),
+      k.param        = dcfg$n_neighbors,
+      return.neighbor = FALSE,
+      compute.SNN    = TRUE,
+      prune.SNN      = gcfg$seurat_prune_snn,
+      nn.method      = gcfg$seurat_nn_method,
+      nn.eps         = gcfg$seurat_nn_eps,
+      graph.name     = c("RNA_nn", "RNA_snn"),
+      verbose        = FALSE
+    )
+    graph_for_clustering <- "RNA_snn"
+  }
+})
+
+cat("Graph mode:", graph_mode, "\n")
+cat("Clustering graph:", graph_for_clustering, "\n")
+```
+
+## Leiden Clustering
+
+Seurat semantics differ from Scanpy/cuGraph.
+`n.start = 1` is pinned to reduce an extra search dimension that
+Scanpy/rsc do not expose in the same way.
+
+```{r leiden}
+system.time({
+  obj <- FindClusters(
+    obj,
+    graph.name    = graph_for_clustering,
+    resolution    = dcfg$leiden_resolution,
+    algorithm     = 4,
+    leiden_method  = gcfg$seurat_leiden_method,
+    n.start       = gcfg$seurat_leiden_n_start,
+    n.iter        = gcfg$seurat_leiden_n_iter,
+    random.seed   = gcfg$random_state,
+    verbose       = FALSE
+  )
+})
+
+cat("Leiden clusters:", length(levels(Idents(obj))), "\n")
+```
+
+## UMAP
+
+For visualization only — not the primary validation target.
+
+```{r umap}
+system.time({
+  obj <- RunUMAP(
+    obj,
+    reduction   = "pca",
+    dims        = seq_len(dcfg$neighbors_n_pcs),
+    umap.method = "uwot",
+    n.neighbors = dcfg$n_neighbors,
+    metric      = gcfg$neighbor_metric,
+    min.dist    = gcfg$umap_min_dist,
+    spread      = gcfg$umap_spread,
+    seed.use    = gcfg$random_state,
+    verbose     = FALSE
+  )
+})
+```
+
+```{r umap_plot, fig.width=8, fig.height=6}
+DimPlot(obj, reduction = "umap", label = TRUE, pt.size = 0.5) +
+  ggtitle(paste0(dcfg$name, " — Seurat CPU Harmonized"))
+```
+
+## Differential Expression
+
+Minimize Seurat-side DE prefiltering (`min.pct = 0`, `logfc.threshold = 0`)
+so that downstream comparison applies the same `p_adj`/`logFC` threshold
+externally across all libraries.
+
+```{r de, warning=FALSE}
+presto_installed <- requireNamespace("presto", quietly = TRUE)
+cat("presto installed:", presto_installed, "\n")
+
+system.time({
+  markers <- FindAllMarkers(
+    obj,
+    only.pos        = FALSE,
+    test.use        = "wilcox",
+    min.pct         = 0,
+    logfc.threshold = 0,
+    verbose         = FALSE
+  )
+})
+
+markers_filtered <- subset(markers, p_val_adj < 0.05 & avg_log2FC > 0.1)
+
+cat("Total marker rows:", nrow(markers), "\n")
+cat("Filtered markers (p_val_adj < 0.05 & avg_log2FC > 0.1):", nrow(markers_filtered), "\n")
+```
+
+## Save All Outputs
+
+```{r save}
+# RDS
+saveRDS(obj, out_paths$rds)
+
+# Cluster assignments
+write.csv(
+  data.frame(
+    barcode = colnames(obj),
+    leiden  = as.character(Idents(obj)),
+    stringsAsFactors = FALSE
+  ),
+  out_paths$clusters,
+  row.names = FALSE
+)
+
+# DE markers
+write.csv(markers, out_paths$markers, row.names = FALSE)
+write.csv(markers_filtered, out_paths$markers_filtered, row.names = FALSE)
+
+# UMAP coordinates
+write.csv(
+  data.frame(
+    barcode = rownames(Embeddings(obj, "umap")),
+    Embeddings(obj, "umap"),
+    stringsAsFactors = FALSE
+  ),
+  out_paths$umap,
+  row.names = FALSE
+)
+
+# HVG list
+write.csv(
+  data.frame(gene = VariableFeatures(obj), stringsAsFactors = FALSE),
+  out_paths$hvg,
+  row.names = FALSE
+)
+
+cat("Saved all CSV outputs.\n")
+```
+
+## Spec JSON
+
+```{r spec}
+spec <- list(
+  pipeline              = "seurat_cpu_harmonized",
+  dataset               = dcfg$name,
+  seurat_version        = as.character(packageVersion("Seurat")),
+  seurat_object_version = as.character(packageVersion("SeuratObject")),
+  matrix_version        = as.character(packageVersion("Matrix")),
+  input                 = dcfg$input_path,
+  canonical_cells       = dcfg$canonical_cells_txt,
+  canonical_genes       = dcfg$canonical_genes_txt,
+  parameters = list(
+    target_sum         = gcfg$target_sum,
+    hvg_method         = "vst",
+    n_top_genes        = dcfg$n_top_genes,
+    scale_data         = TRUE,
+    scale_features     = "VariableFeatures(obj)",
+    pca_n_comps        = gcfg$pca_n_comps,
+    n_neighbors        = dcfg$n_neighbors,
+    neighbors_n_pcs    = dcfg$neighbors_n_pcs,
+    neighbor_metric    = gcfg$neighbor_metric,
+    nn_method          = gcfg$seurat_nn_method,
+    nn_eps             = gcfg$seurat_nn_eps,
+    graph_mode         = graph_mode,
+    clustering_graph   = graph_for_clustering,
+    clustering_algorithm = "Leiden",
+    leiden_method      = gcfg$seurat_leiden_method,
+    leiden_n_start     = gcfg$seurat_leiden_n_start,
+    leiden_n_iter      = gcfg$seurat_leiden_n_iter,
+    leiden_resolution  = dcfg$leiden_resolution,
+    umap_method        = "uwot",
+    umap_n_neighbors   = dcfg$n_neighbors,
+    umap_metric        = gcfg$neighbor_metric,
+    umap_min_dist      = gcfg$umap_min_dist,
+    umap_spread        = gcfg$umap_spread,
+    random_state       = gcfg$random_state,
+    de_test            = "wilcox",
+    de_min_pct         = 0,
+    de_logfc_threshold = 0,
+    presto_installed   = presto_installed
+  ),
+  results = list(
+    n_cells              = ncol(obj),
+    n_genes              = nrow(obj),
+    n_hvg                = length(VariableFeatures(obj)),
+    n_clusters           = length(levels(Idents(obj))),
+    n_marker_rows        = nrow(markers),
+    n_marker_rows_filtered = nrow(markers_filtered)
+  )
+)
+
+writeLines(toJSON(spec, pretty = TRUE, auto_unbox = TRUE), out_paths$spec)
+cat("Spec written to:", out_paths$spec, "\n")
+```
+
+## Summary
+
+```{r summary}
+cat(strrep("=", 60), "\n")
+cat("RESULTS SUMMARY\n")
+cat(strrep("=", 60), "\n")
+cat("Dataset         :", dcfg$name, "\n")
+cat("Cells           :", ncol(obj), "\n")
+cat("Genes           :", nrow(obj), "\n")
+cat("HVGs            :", length(VariableFeatures(obj)), "\n")
+cat("Clusters        :", length(levels(Idents(obj))), "\n")
+cat("Marker rows     :", nrow(markers), "\n")
+cat("Filtered markers:", nrow(markers_filtered), "\n")
+cat("\nOutput files:\n")
+for (p in out_paths) cat("  ", p, "\n")
+```
+
+```{r session_info}
+sessionInfo()
+```

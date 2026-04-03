@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://github.com/interactivereport/scaleSC/tree/main/</loc>
+         <lastmod>2024-11-07</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/interactivereport/scaleSC/tree/main/api-docs/</loc>
+         <lastmod>2024-11-07</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/interactivereport/scaleSC/tree/main/api-docs/harmonypy_gpu/</loc>
+         <lastmod>2024-11-07</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/interactivereport/scaleSC/tree/main/api-docs/kernels/</loc>
+         <lastmod>2024-11-07</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/interactivereport/scaleSC/tree/main/api-docs/pp/</loc>
+         <lastmod>2024-11-07</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/interactivereport/scaleSC/tree/main/api-docs/trim_merge_marker/</loc>
+         <lastmod>2024-11-07</lastmod>
+    </url>
+    <url>
+         <loc>https://github.com/interactivereport/scaleSC/tree/main/api-docs/util/</loc>
+         <lastmod>2024-11-07</lastmod>
+    </url>
+</urlset>

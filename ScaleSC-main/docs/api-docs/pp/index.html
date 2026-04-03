@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Haotian Zhang">
+        <link rel="canonical" href="https://github.com/interactivereport/scaleSC/tree/main/api-docs/pp/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>scalesc.pp - ScaleSC</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../../css/brands.min.css" rel="stylesheet">
+        <link href="../../css/solid.min.css" rel="stylesheet">
+        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">ScaleSC</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href="../.." class="nav-link">Get Started</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">API Reference</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../" class="dropdown-item">Overview</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active" aria-current="page">scalesc.pp</a>
+</li>
+                                    
+<li>
+    <a href="../harmony_gpu.md" class="dropdown-item">scalesc.harmony_gpu</a>
+</li>
+                                    
+<li>
+    <a href="../trim_merge_marker/" class="dropdown-item">scalesc.trim_merge_marker</a>
+</li>
+                                    
+<li>
+    <a href="../kernels/" class="dropdown-item">scalesc.kernels</a>
+</li>
+                                    
+<li>
+    <a href="../util/" class="dropdown-item">scalesc.util</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../trim_merge_marker/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/interactivereport/scaleSC/docs/api-docs/pp.md" class="nav-link">Edit on Github
+                                    </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#module-pp" class="nav-link">module pp</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#global-variables" class="nav-link">Global Variables</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#class-scalesc" class="nav-link">class ScaleSC</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<!-- markdownlint-disable -->
+
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/pp.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h1 id="module-pp"><kbd>module</kbd> <code>pp</code></h1>
+<h2 id="global-variables"><strong>Global Variables</strong></h2>
+<ul>
+<li><strong>get_mean_var_major_kernel</strong></li>
+<li><strong>get_mean_var_minor_kernel</strong></li>
+<li><strong>find_indices_kernel</strong></li>
+</ul>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/pp.py#L14"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="class-scalesc"><kbd>class</kbd> <code>ScaleSC</code></h2>
+<p>ScaleSC integrated pipeline in a scanpy-like style. </p>
+<p>It will automatcially load dataset in chunks, see <code>scalesc.util.AnnDataBatchReader</code>  for details, and all methods in this class manipulate this chunked data. </p>
+<p><strong>Args:</strong></p>
+<ul>
+<li><b><code>data_dir</code></b> (<code>str</code>):  Data folder of the dataset. </li>
+<li><b><code>max_cell_batch</code></b> (<code>int</code>):  Maximum number of cells in a single batch. </li>
+<li><b><code>Default</code></b>:  100000. </li>
+<li><b><code>preload_on_cpu</code></b> (<code>bool</code>):  If load the entire chunked data on CPU. Default: <code>True</code> </li>
+<li><b><code>preload_on_gpu</code></b> (<code>bool</code>):  If load the entire chunked data on GPU, <code>preload_on_cpu</code>  </li>
+<li><b><code>will be overwritten to</code>True<code>when this sets to</code>True<code>. Default</code></b>:  <code>True</code>. </li>
+<li><b><code>save_raw_counts</code></b> (<code>bool</code>):  If save <code>adata_X</code> to disk after QC filtering.  </li>
+<li><b><code>Default</code></b>:  False. </li>
+<li><b><code>save_norm_counts</code></b> (<code>bool</code>):  If save <code>adata_X</code> data to disk after normalization.  </li>
+<li><b><code>Default</code></b>:  False. </li>
+<li><b><code>save_after_each_step</code></b> (<code>bool</code>):  If save <code>adata</code> (without .X) to disk after each step.  </li>
+<li><b><code>Default</code></b>:  False. </li>
+<li><b><code>output_dir</code></b> (<code>str</code>):  Output folder. Default: './results'. </li>
+<li><b><code>gpus</code></b> (<code>list</code>):  List of GPU ids, <code>[0]</code> is set if this is None. Default: None. </li>
+</ul>
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/pp.py#L37"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-__init__"><kbd>method</kbd> <code>__init__</code></h3>
+<pre><code class="language-python">__init__(
+    data_dir,
+    max_cell_batch=100000.0,
+    preload_on_cpu=True,
+    preload_on_gpu=True,
+    save_raw_counts=False,
+    save_norm_counts=False,
+    save_after_each_step=False,
+    output_dir='results',
+    gpus=None
+)
+</code></pre>
+<hr />
+<h4 id="property-adata"><kbd>property</kbd> adata</h4>
+<p><code>AnnData</code>: An AnnData object that used to store all intermediate results  without the count matrix.  </p>
+<p>Note: This is always on CPU. </p>
+<hr />
+<h4 id="property-adata_x"><kbd>property</kbd> adata_X</h4>
+<p><code>AnnData</code>: An <code>AnnData</code> object that used to store all intermediate results  including the count matrix. Internally, all chunks should be merged on CPU to avoid  high GPU consumption, make sure to invoke <code>to_CPU()</code> before calling this object. </p>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/pp.py#L100"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-calculate_qc_metrics"><kbd>method</kbd> <code>calculate_qc_metrics</code></h3>
+<pre><code class="language-python">calculate_qc_metrics()
+</code></pre>
+<p>Calculate quality control metrics. </p>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/pp.py#L87"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-clear"><kbd>method</kbd> <code>clear</code></h3>
+<pre><code class="language-python">clear()
+</code></pre>
+<p>Clean the memory </p>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/pp.py#L128"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-filter_cells"><kbd>method</kbd> <code>filter_cells</code></h3>
+<pre><code class="language-python">filter_cells(min_count=0, max_count=None, qc_var='n_genes_by_counts', qc=False)
+</code></pre>
+<p>Filter genes based on number of a QC metric. </p>
+<p><strong>Args:</strong></p>
+<ul>
+<li><b><code>min_count</code></b> (<code>int</code>):  Minimum number of counts required for a cell to pass filtering. </li>
+<li><b><code>max_count</code></b> (<code>int</code>):  Maximum number of counts required for a cell to pass filtering. </li>
+<li><b><code>qc_var</code></b> (<code>str</code>='n_genes_by_counts'):  Feature in QC metrics that used to filter cells. </li>
+<li><b><code>qc</code></b> (<code>bool</code>=<code>False</code>):  Call <code>calculate_qc_metrics</code> before filtering. </li>
+</ul>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/pp.py#L106"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-filter_genes"><kbd>method</kbd> <code>filter_genes</code></h3>
+<pre><code class="language-python">filter_genes(min_count=0, max_count=None, qc_var='n_cells_by_counts', qc=False)
+</code></pre>
+<p>Filter genes based on number of a QC metric. </p>
+<p><strong>Args:</strong></p>
+<ul>
+<li><b><code>min_count</code></b> (<code>int</code>):  Minimum number of counts required for a gene to pass filtering. </li>
+<li><b><code>max_count</code></b> (<code>int</code>):  Maximum number of counts required for a gene to pass filtering. </li>
+<li><b><code>qc_var</code></b> (<code>str</code>='n_cells_by_counts'):  Feature in QC metrics that used to filter genes. </li>
+<li><b><code>qc</code></b> (<code>bool</code>=<code>False</code>):  Call <code>calculate_qc_metrics</code> before filtering. </li>
+</ul>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/pp.py#L148"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-filter_genes_and_cells"><kbd>method</kbd> <code>filter_genes_and_cells</code></h3>
+<pre><code class="language-python">filter_genes_and_cells(
+    min_counts_per_gene=0,
+    min_counts_per_cell=0,
+    max_counts_per_gene=None,
+    max_counts_per_cell=None,
+    qc_var_gene='n_cells_by_counts',
+    qc_var_cell='n_genes_by_counts',
+    qc=False
+)
+</code></pre>
+<p>Filter genes based on number of a QC metric. </p>
+<p><strong>Note:</strong></p>
+<blockquote>
+<p>This is an efficient way to perform a regular filtering on genes and cells without repeatedly iterating over chunks. 
+</p>
+</blockquote>
+<p><strong>Args:</strong></p>
+<ul>
+<li><b><code>min_counts_per_gene</code></b> (<code>int</code>):  Minimum number of counts required for a gene to pass filtering. </li>
+<li><b><code>max_counts_per_gene</code></b> (<code>int</code>):  Maximum number of counts required for a gene to pass filtering. </li>
+<li><b><code>qc_var_gene</code></b> (<code>str</code>='n_cells_by_counts'):  Feature in QC metrics that used to filter genes. </li>
+<li><b><code>min_counts_per_cell</code></b> (<code>int</code>):  Minimum number of counts required for a cell to pass filtering. </li>
+<li><b><code>max_counts_per_cell</code></b> (<code>int</code>):  Maximum number of counts required for a cell to pass filtering. </li>
+<li><b><code>qc_var_cell</code></b> (<code>str</code>='n_genes_by_counts'):  Feature in QC metrics that used to filter cells. </li>
+<li><b><code>qc</code></b> (<code>bool</code>=<code>False</code>):  Call <code>calculate_qc_metrics</code> before filtering. </li>
+</ul>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/pp.py#L351"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-harmony"><kbd>method</kbd> <code>harmony</code></h3>
+<pre><code class="language-python">harmony(sample_col_name, n_init=10, max_iter_harmony=20)
+</code></pre>
+<p>Use Harmony to integrate different experiments. </p>
+<p><strong>Note:</strong></p>
+<blockquote>
+<p>This modified harmony function can easily scale up to 15M cells with 50 pcs on GPU (A100 80G). Result after harmony is stored into <code>adata.obsm['X_pca_harmony']</code>. 
+</p>
+</blockquote>
+<p><strong>Args:</strong></p>
+<ul>
+<li><b><code>sample_col_name</code></b> (<code>str</code>):  Column of sample ID. </li>
+<li><b><code>n_init</code></b> (<code>int</code>=<code>10</code>):  Number of times the k-means algorithm is run with different centroid seeds. </li>
+<li><b><code>max_iter_harmony</code></b> (<code>int</code>=<code>20</code>):  Maximum iteration number of harmony. </li>
+</ul>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/pp.py#L186"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-highly_variable_genes"><kbd>method</kbd> <code>highly_variable_genes</code></h3>
+<pre><code class="language-python">highly_variable_genes(n_top_genes=4000, method='seurat_v3')
+</code></pre>
+<p>Annotate highly variable genes. </p>
+<p><strong>Note:</strong></p>
+<blockquote>
+<p>Only <code>seurat_v3</code> is implemented. Count data is expected for <code>seurat_v3</code>. HVGs are set to <code>True</code> in <code>adata.var['highly_variable']</code>. 
+</p>
+</blockquote>
+<p><strong>Args:</strong></p>
+<ul>
+<li><b><code>n_top_genes</code></b> (<code>int</code>=<code>4000</code>):  Number of highly-variable genes to keep. </li>
+<li><b><code>method</code></b> (<code>str</code>=<code>'seurat_v3'</code>):  Choose the flavor for identifying highly variable genes. </li>
+</ul>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/pp.py#L381"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-leiden"><kbd>method</kbd> <code>leiden</code></h3>
+<pre><code class="language-python">leiden(resolution=0.5, random_state=42)
+</code></pre>
+<p>Performs Leiden clustering using <code>rapids-singlecell</code>. </p>
+<p><strong>Args:</strong></p>
+<ul>
+<li><b><code>resolution</code></b> (<code>float</code>=<code>0.5</code>):  A parameter value controlling the coarseness of the clustering.  (called gamma in the modularity formula). Higher values lead to more clusters. </li>
+<li><b><code>random_state</code></b> (<code>int</code>=<code>42</code>):  Random seed. </li>
+</ul>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/pp.py#L367"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-neighbors"><kbd>method</kbd> <code>neighbors</code></h3>
+<pre><code class="language-python">neighbors(n_neighbors=20, n_pcs=50, use_rep='X_pac_harmony', algorithm='cagra')
+</code></pre>
+<p>Compute a neighborhood graph of observations using <code>rapids-singlecell</code>. </p>
+<p><strong>Args:</strong></p>
+<ul>
+<li><b><code>n_neighbors</code></b> (<code>int</code>=<code>20</code>):  The size of local neighborhood (in terms of number of neighboring data points)  used for manifold approximation. </li>
+<li><b><code>n_pcs</code></b> (<code>int</code>=<code>50</code>):  Use this many PCs. </li>
+<li><b><code>use_rep</code></b> (<code>str</code>=<code>'X_pca_harmony'</code>):  Use the indicated representation. </li>
+<li><b><code>algorithm</code></b> (<code>str</code>=<code>'cagra'</code>):  The query algorithm to use. </li>
+</ul>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/pp.py#L245"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-normalize_log1p"><kbd>method</kbd> <code>normalize_log1p</code></h3>
+<pre><code class="language-python">normalize_log1p(target_sum=10000.0)
+</code></pre>
+<p>Normalize counts per cell then log1p. </p>
+<p><strong>Note:</strong></p>
+<blockquote>
+<p>If <code>save_raw_counts</code> or <code>save_norm_counts</code> is set, write <code>adata_X</code> to disk here automatically. 
+</p>
+</blockquote>
+<p><strong>Args:</strong></p>
+<ul>
+<li><b><code>target_sum</code></b> (<code>int</code>=<code>1e4</code>):  If None, after normalization, each observation (cell) has a total count  equal to the median of total counts for observations (cells) before normalization. </li>
+</ul>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/pp.py#L307"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-normalize_log1p_pca"><kbd>method</kbd> <code>normalize_log1p_pca</code></h3>
+<pre><code class="language-python">normalize_log1p_pca(
+    target_sum=10000.0,
+    n_components=50,
+    hvg_var='highly_variable'
+)
+</code></pre>
+<p>An alternative for calling <code>normalize_log1p</code> and <code>pca</code> together.   </p>
+<p><strong>Note:</strong></p>
+<blockquote>
+<p>Used when <code>preload_on_cpu</code> is <code>False</code>. </p>
+</blockquote>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/pp.py#L265"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-pca"><kbd>method</kbd> <code>pca</code></h3>
+<pre><code class="language-python">pca(n_components=50, hvg_var='highly_variable')
+</code></pre>
+<p>Principal component analysis. </p>
+<p>Computes PCA coordinates, loadings and variance decomposition. Uses the implementation of scikit-learn. </p>
+<p><strong>Note:</strong></p>
+<blockquote>
+<p>Flip the directions according to the largest values in loadings. Results will match up with scanpy perfectly. Calculated PCA matrix is stored in <code>adata.obsm['X_pca']</code>. 
+</p>
+</blockquote>
+<p><strong>Args:</strong></p>
+<ul>
+<li><b><code>n_components</code></b> (<code>int</code>=<code>50</code>):  Number of principal components to compute. </li>
+<li><b><code>hvg_var</code></b> (<code>str</code>=<code>'highly_variable'</code>):  Use highly variable genes only. </li>
+</ul>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/pp.py#L404"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-save"><kbd>method</kbd> <code>save</code></h3>
+<pre><code class="language-python">save(data_name=None)
+</code></pre>
+<p>Save <code>adata</code> to disk. </p>
+<p><strong>Note:</strong></p>
+<blockquote>
+<p>Save to '<code>output_dir</code>/<code>data_name</code>.h5ad'. 
+</p>
+</blockquote>
+<p><strong>Args:</strong></p>
+<ul>
+<li><b><code>data_name</code></b> (<code>str</code>):  If <code>None</code>, set as <code>data_dir</code>. </li>
+</ul>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/pp.py#L417"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-savex"><kbd>method</kbd> <code>savex</code></h3>
+<pre><code class="language-python">savex(name, data_name=None)
+</code></pre>
+<p>Save <code>adata</code> to disk in chunks. </p>
+<p><strong>Note:</strong></p>
+<blockquote>
+<p>Each chunk will be saved individually in a subfolder under <code>output_dir</code>. Save to '<code>output_dir</code>/<code>name</code>/<code>data_name</code>_<code>i</code>.h5ad'. 
+</p>
+</blockquote>
+<p><strong>Args:</strong></p>
+<ul>
+<li><b><code>name</code></b> (<code>str</code>):  Subfolder name.  </li>
+<li><b><code>data_name</code></b> (<code>str</code>):  If <code>None</code>, set as <code>data_dir</code>. </li>
+</ul>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/pp.py#L83"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-to_cpu"><kbd>method</kbd> <code>to_CPU</code></h3>
+<pre><code class="language-python">to_CPU()
+</code></pre>
+<p>Move all chunks to CPU. </p>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/pp.py#L79"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-to_gpu"><kbd>method</kbd> <code>to_GPU</code></h3>
+<pre><code class="language-python">to_GPU()
+</code></pre>
+<p>Move all chunks to GPU. </p>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/pp.py#L394"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-umap"><kbd>method</kbd> <code>umap</code></h3>
+<pre><code class="language-python">umap(random_state=42)
+</code></pre>
+<p>Embed the neighborhood graph using <code>rapids-singlecell</code>. </p>
+<p><strong>Args:</strong></p>
+<ul>
+<li><b><code>random_state</code></b> (<code>int</code>=<code>42</code>):  Random seed. </li>
+</ul>
+<hr />
+<p><em>This file was automatically generated via <a href="https://github.com/ml-tooling/lazydocs">lazydocs</a>.</em></p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js"></script>
+        <script src="../../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

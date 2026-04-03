@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Haotian Zhang">
+        <link rel="canonical" href="https://github.com/interactivereport/scaleSC/tree/main/api-docs/util/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>scalesc.util - ScaleSC</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../../css/brands.min.css" rel="stylesheet">
+        <link href="../../css/solid.min.css" rel="stylesheet">
+        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">ScaleSC</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href="../.." class="nav-link">Get Started</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle active" aria-current="page" role="button" data-bs-toggle="dropdown"  aria-expanded="false">API Reference</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../" class="dropdown-item">Overview</a>
+</li>
+                                    
+<li>
+    <a href="../pp/" class="dropdown-item">scalesc.pp</a>
+</li>
+                                    
+<li>
+    <a href="../harmony_gpu.md" class="dropdown-item">scalesc.harmony_gpu</a>
+</li>
+                                    
+<li>
+    <a href="../trim_merge_marker/" class="dropdown-item">scalesc.trim_merge_marker</a>
+</li>
+                                    
+<li>
+    <a href="../kernels/" class="dropdown-item">scalesc.kernels</a>
+</li>
+                                    
+<li>
+    <a href="./" class="dropdown-item active" aria-current="page">scalesc.util</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../kernels/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" class="nav-link disabled">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/interactivereport/scaleSC/docs/api-docs/util.md" class="nav-link">Edit on Github
+                                    </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#module-util" class="nav-link">module util</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#global-variables" class="nav-link">Global Variables</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#function-filter_cells" class="nav-link">function filter_cells</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#function-svd_flip" class="nav-link">function svd_flip</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#function-check_dtype" class="nav-link">function check_dtype</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#function-gc" class="nav-link">function gc</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#function-get_mean_var" class="nav-link">function get_mean_var</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#function-check_nonnegative_integers" class="nav-link">function check_nonnegative_integers</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#function-harmony" class="nav-link">function harmony</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#function-correct_leiden" class="nav-link">function correct_leiden</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#function-find_indices" class="nav-link">function find_indices</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#function-csr_indptr_to_coo_rows" class="nav-link">function csr_indptr_to_coo_rows</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#function-csr_row_index" class="nav-link">function csr_row_index</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#function-csr_col_index" class="nav-link">function csr_col_index</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#function-write_to_disk" class="nav-link">function write_to_disk</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#class-anndatabatchreader" class="nav-link">class AnnDataBatchReader</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<!-- markdownlint-disable -->
+
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h1 id="module-util"><kbd>module</kbd> <code>util</code></h1>
+<h2 id="global-variables"><strong>Global Variables</strong></h2>
+<ul>
+<li><strong>TYPE_CHECKING</strong></li>
+<li><strong>GPU_MEMORY_LIMIT</strong></li>
+<li><strong>GPU_MEMORY_USAGE</strong></li>
+</ul>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L465"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="function-filter_cells"><kbd>function</kbd> <code>filter_cells</code></h2>
+<pre><code class="language-python">filter_cells(adata, qc_var, min_count, max_count)
+</code></pre>
+<p>Cell filtering according to min and max gene counts. </p>
+<p><strong>Note:</strong></p>
+<blockquote>
+<p><code>filter_cells</code> in rsc doesn't support filter out cells by min and max counts at the same time. a modification is made here for dealing with both together. </p>
+</blockquote>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L490"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="function-svd_flip"><kbd>function</kbd> <code>svd_flip</code></h2>
+<pre><code class="language-python">svd_flip(pcs)
+</code></pre>
+<p>Flip the signs of loading according to sign(max(abs(loadings))). </p>
+<p>Note: this function is used to match up scanpy's results of PCA. </p>
+<p><strong>Args:</strong></p>
+<ul>
+<li><b><code>pcs</code></b> (:obj:<code>np.ndarray</code>|<code>cp.ndarray</code>):  PC loadings. </li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><b><code>pcs_adjusted</code></b> (:obj:<code>np.ndarray</code>|<code>cp.ndarray</code>):  Flipped loadings. </li>
+</ul>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L507"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="function-check_dtype"><kbd>function</kbd> <code>check_dtype</code></h2>
+<pre><code class="language-python">check_dtype(adata)
+</code></pre>
+<p>Convert dtype to <code>float32</code> or <code>float64</code>. </p>
+<p><strong>Note:</strong></p>
+<blockquote>
+<p><code>rapids-singlecell</code> doesn't support sparse matrix under <code>float16</code>. </p>
+</blockquote>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L520"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="function-gc"><kbd>function</kbd> <code>gc</code></h2>
+<pre><code class="language-python">gc()
+</code></pre>
+<p>Release CPU and GPU RAM </p>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L577"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="function-get_mean_var"><kbd>function</kbd> <code>get_mean_var</code></h2>
+<pre><code class="language-python">get_mean_var(X, axis=0)
+</code></pre>
+<p>Calculating mean and variance of a given matrix based on customized kernels. </p>
+<p><strong>Note:</strong></p>
+<blockquote>
+<p>No such methods implemented yet for <code>csr_matrix</code>. </p>
+</blockquote>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L607"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="function-check_nonnegative_integers"><kbd>function</kbd> <code>check_nonnegative_integers</code></h2>
+<pre><code class="language-python">check_nonnegative_integers(X)
+</code></pre>
+<p>Check if <code>X</code> is a nonnegative integer matrix. </p>
+<p><strong>Note:</strong></p>
+<blockquote>
+<p>Check values of data to ensure it is count data. </p>
+</blockquote>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L626"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="function-harmony"><kbd>function</kbd> <code>harmony</code></h2>
+<pre><code class="language-python">harmony(
+    adata,
+    key,
+    basis='X_pca',
+    adjusted_basis='X_pca_harmony',
+    init_seeds=None,
+    n_init=1,
+    dtype=&lt;class 'numpy.float32'&gt;,
+    max_iter_harmony=10,
+    random_state=0,
+    **kwargs
+)
+</code></pre>
+<p>Harmony GPU version.  </p>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L645"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="function-correct_leiden"><kbd>function</kbd> <code>correct_leiden</code></h2>
+<pre><code class="language-python">correct_leiden(adata)
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L651"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="function-find_indices"><kbd>function</kbd> <code>find_indices</code></h2>
+<pre><code class="language-python">find_indices(A, indptr, out_rows)
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L660"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="function-csr_indptr_to_coo_rows"><kbd>function</kbd> <code>csr_indptr_to_coo_rows</code></h2>
+<pre><code class="language-python">csr_indptr_to_coo_rows(nnz, Bp)
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L666"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="function-csr_row_index"><kbd>function</kbd> <code>csr_row_index</code></h2>
+<pre><code class="language-python">csr_row_index(Ax, Aj, Ap, rows)
+</code></pre>
+<p>Populate indices and data arrays from the given row index. </p>
+<p><strong>Args:</strong></p>
+<ul>
+<li><b><code>Ax</code></b> (<code>cupy.ndarray</code>):  data array from input sparse matrix </li>
+<li><b><code>Aj</code></b> (<code>cupy.ndarray</code>):  indices array from input sparse matrix </li>
+<li><b><code>Ap</code></b> (<code>cupy.ndarray</code>):  indptr array from input sparse matrix </li>
+<li><b><code>rows</code></b> (<code>cupy.ndarray</code>):  index array of rows to populate </li>
+</ul>
+<p><strong>Returns:</strong></p>
+<ul>
+<li><b><code>Bx</code></b> (<code>cupy.ndarray</code>):  data array of output sparse matrix </li>
+<li><b><code>Bj</code></b> (<code>cupy.ndarray</code>):  indices array of output sparse matrix </li>
+<li><b><code>Bp</code></b> (<code>cupy.ndarray</code>):  indptr array for output sparse matrix </li>
+</ul>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L690"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="function-csr_col_index"><kbd>function</kbd> <code>csr_col_index</code></h2>
+<pre><code class="language-python">csr_col_index(Ax, Aj, Ai, cols, shape)
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L697"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="function-write_to_disk"><kbd>function</kbd> <code>write_to_disk</code></h2>
+<pre><code class="language-python">write_to_disk(adata, output_dir, data_name, batch_name=None)
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L30"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="class-anndatabatchreader"><kbd>class</kbd> <code>AnnDataBatchReader</code></h2>
+<p>Chunked dataloader for extremely large single-cell dataset. Return a data chunk each time for further processing. </p>
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L32"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-__init__"><kbd>method</kbd> <code>__init__</code></h3>
+<pre><code class="language-python">__init__(
+    data_dir,
+    preload_on_cpu=True,
+    preload_on_gpu=False,
+    gpus=None,
+    max_cell_batch=100000,
+    max_gpu_memory_usage=48.0,
+    return_anndata=True
+)
+</code></pre>
+<hr />
+<h4 id="property-shape"><kbd>property</kbd> shape</h4>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L84"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-batch_to_cpu"><kbd>method</kbd> <code>batch_to_CPU</code></h3>
+<pre><code class="language-python">batch_to_CPU()
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L89"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-batch_to_gpu"><kbd>method</kbd> <code>batch_to_GPU</code></h3>
+<pre><code class="language-python">batch_to_GPU()
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L281"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-batchify"><kbd>method</kbd> <code>batchify</code></h3>
+<pre><code class="language-python">batchify(axis='cell')
+</code></pre>
+<p>Return a data generator if <code>preload_on_cpu</code> is set as <code>True</code>.  </p>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L75"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-clear"><kbd>method</kbd> <code>clear</code></h3>
+<pre><code class="language-python">clear()
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L94"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-get_merged_adata_with_x"><kbd>method</kbd> <code>get_merged_adata_with_X</code></h3>
+<pre><code class="language-python">get_merged_adata_with_X()
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L205"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-gpu_wrapper"><kbd>method</kbd> <code>gpu_wrapper</code></h3>
+<pre><code class="language-python">gpu_wrapper(generator)
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L210"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-read"><kbd>method</kbd> <code>read</code></h3>
+<pre><code class="language-python">read(fname)
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L129"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-set_cells_filter"><kbd>method</kbd> <code>set_cells_filter</code></h3>
+<pre><code class="language-python">set_cells_filter(filter, update=True)
+</code></pre>
+<p>Update cells filter and applied on data chunks if <code>update</code> set to <code>True</code>, otherwise, update filter only. </p>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L155"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-set_genes_filter"><kbd>method</kbd> <code>set_genes_filter</code></h3>
+<pre><code class="language-python">set_genes_filter(filter, update=True)
+</code></pre>
+<p>Update genes filter and applied on data chunks if <code>update</code> set to True, otherwise, update filter only.  </p>
+<p><strong>Note:</strong></p>
+<blockquote>
+<p>Genes filter can be set sequentially, a new filter should be always compatible with the previous filtered data. </p>
+</blockquote>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L191"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-update_by_cells_filter"><kbd>method</kbd> <code>update_by_cells_filter</code></h3>
+<pre><code class="language-python">update_by_cells_filter(filter)
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/util.py#L198"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-update_by_genes_filter"><kbd>method</kbd> <code>update_by_genes_filter</code></h3>
+<pre><code class="language-python">update_by_genes_filter(filter)
+</code></pre>
+<hr />
+<p><em>This file was automatically generated via <a href="https://github.com/ml-tooling/lazydocs">lazydocs</a>.</em></p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js"></script>
+        <script src="../../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

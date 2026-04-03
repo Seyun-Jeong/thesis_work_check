@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        <meta name="author" content="Haotian Zhang">
+        <link rel="canonical" href="https://github.com/interactivereport/scaleSC/tree/main/api-docs/harmonypy_gpu/">
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>Harmonypy gpu - ScaleSC</title>
+        <link href="../../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../../css/brands.min.css" rel="stylesheet">
+        <link href="../../css/solid.min.css" rel="stylesheet">
+        <link href="../../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="../..">ScaleSC</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href="../.." class="nav-link">Get Started</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a href="#" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"  aria-expanded="false">API Reference</a>
+                                <ul class="dropdown-menu">
+                                    
+<li>
+    <a href="../" class="dropdown-item">Overview</a>
+</li>
+                                    
+<li>
+    <a href="../pp/" class="dropdown-item">scalesc.pp</a>
+</li>
+                                    
+<li>
+    <a href="../harmony_gpu.md" class="dropdown-item">scalesc.harmony_gpu</a>
+</li>
+                                    
+<li>
+    <a href="../trim_merge_marker/" class="dropdown-item">scalesc.trim_merge_marker</a>
+</li>
+                                    
+<li>
+    <a href="../kernels/" class="dropdown-item">scalesc.kernels</a>
+</li>
+                                    
+<li>
+    <a href="../util/" class="dropdown-item">scalesc.util</a>
+</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a href="https://github.com/interactivereport/scaleSC/docs/api-docs/harmonypy_gpu.md" class="nav-link">Edit on Github
+                                    </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#module-harmonypy_gpu" class="nav-link">module harmonypy_gpu</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#function-get_usage" class="nav-link">function get_usage</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#function-to_csr_cuda" class="nav-link">function to_csr_cuda</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#function-to_csc_cuda" class="nav-link">function to_csc_cuda</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#function-get_dummies" class="nav-link">function get_dummies</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#function-run_harmony" class="nav-link">function run_harmony</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#function-safe_entropy" class="nav-link">function safe_entropy</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#function-moe_correct_ridge" class="nav-link">function moe_correct_ridge</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#class-harmony" class="nav-link">class Harmony</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<!-- markdownlint-disable -->
+
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/harmonypy_gpu.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h1 id="module-harmonypy_gpu"><kbd>module</kbd> <code>harmonypy_gpu</code></h1>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/harmonypy_gpu.py#L47"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="function-get_usage"><kbd>function</kbd> <code>get_usage</code></h2>
+<pre><code class="language-python">get_usage(s)
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/harmonypy_gpu.py#L50"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="function-to_csr_cuda"><kbd>function</kbd> <code>to_csr_cuda</code></h2>
+<pre><code class="language-python">to_csr_cuda(x, dtype)
+</code></pre>
+<p>Move to GPU as a csr_matrix.  </p>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/harmonypy_gpu.py#L56"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="function-to_csc_cuda"><kbd>function</kbd> <code>to_csc_cuda</code></h2>
+<pre><code class="language-python">to_csc_cuda(x, dtype)
+</code></pre>
+<p>Move to GPU as a csc_matrix, speed up column slice.  </p>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/harmonypy_gpu.py#L62"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="function-get_dummies"><kbd>function</kbd> <code>get_dummies</code></h2>
+<pre><code class="language-python">get_dummies(x)
+</code></pre>
+<p>Return a sparse dummy matrix.  </p>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/harmonypy_gpu.py#L79"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="function-run_harmony"><kbd>function</kbd> <code>run_harmony</code></h2>
+<pre><code class="language-python">run_harmony(
+    data_mat: 'ndarray',
+    meta_data: 'DataFrame',
+    vars_use,
+    init_seeds=None,
+    theta=None,
+    lamb=None,
+    sigma=0.1,
+    nclust=None,
+    tau=0,
+    block_size=0.05,
+    max_iter_harmony=10,
+    max_iter_kmeans=20,
+    epsilon_cluster=1e-05,
+    epsilon_harmony=0.0001,
+    plot_convergence=False,
+    verbose=True,
+    reference_values=None,
+    cluster_prior=None,
+    n_init=1,
+    random_state=0,
+    dtype=&lt;class 'numpy.float32'&gt;
+)
+</code></pre>
+<p>Run Harmony. </p>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/harmonypy_gpu.py#L477"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="function-safe_entropy"><kbd>function</kbd> <code>safe_entropy</code></h2>
+<pre><code class="language-python">safe_entropy(x: 'array')
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/harmonypy_gpu.py#L494"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="function-moe_correct_ridge"><kbd>function</kbd> <code>moe_correct_ridge</code></h2>
+<pre><code class="language-python">moe_correct_ridge(Z_orig, Z_cos, Z_corr, R, W, K, Phi_Rk, Phi_moe, lamb)
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/harmonypy_gpu.py#L199"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h2 id="class-harmony"><kbd>class</kbd> <code>Harmony</code></h2>
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/harmonypy_gpu.py#L201"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-__init__"><kbd>method</kbd> <code>__init__</code></h3>
+<pre><code class="language-python">__init__(
+    Z,
+    init_seeds,
+    n_init,
+    Phi,
+    Phi_moe,
+    Pr_b,
+    sigma,
+    theta,
+    max_iter_harmony,
+    max_iter_kmeans,
+    epsilon_kmeans,
+    epsilon_harmony,
+    K,
+    block_size,
+    lamb,
+    verbose,
+    random_state,
+    dtype
+)
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/harmonypy_gpu.py#L273"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-allocate_buffers"><kbd>method</kbd> <code>allocate_buffers</code></h3>
+<pre><code class="language-python">allocate_buffers()
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/harmonypy_gpu.py#L455"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-check_convergence"><kbd>method</kbd> <code>check_convergence</code></h3>
+<pre><code class="language-python">check_convergence(i_type)
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/harmonypy_gpu.py#L384"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-cluster"><kbd>method</kbd> <code>cluster</code></h3>
+<pre><code class="language-python">cluster()
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/harmonypy_gpu.py#L332"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-compute_objective"><kbd>method</kbd> <code>compute_objective</code></h3>
+<pre><code class="language-python">compute_objective()
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/harmonypy_gpu.py#L352"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-harmonize"><kbd>method</kbd> <code>harmonize</code></h3>
+<pre><code class="language-python">harmonize(iter_harmony=10, verbose=True)
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/harmonypy_gpu.py#L300"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-init_cluster"><kbd>method</kbd> <code>init_cluster</code></h3>
+<pre><code class="language-python">init_cluster()
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/harmonypy_gpu.py#L283"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-kmeans_multirestart"><kbd>method</kbd> <code>kmeans_multirestart</code></h3>
+<pre><code class="language-python">kmeans_multirestart()
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/harmonypy_gpu.py#L270"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-result"><kbd>method</kbd> <code>result</code></h3>
+<pre><code class="language-python">result()
+</code></pre>
+<hr />
+<p><a href="https://github.com/interactivereport/scaleSC/tree/main/scalesc/harmonypy_gpu.py#L410"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a></p>
+<h3 id="method-update_r"><kbd>method</kbd> <code>update_R</code></h3>
+<pre><code class="language-python">update_R()
+</code></pre>
+<hr />
+<p><em>This file was automatically generated via <a href="https://github.com/ml-tooling/lazydocs">lazydocs</a>.</em></p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../js/base.js"></script>
+        <script src="../../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

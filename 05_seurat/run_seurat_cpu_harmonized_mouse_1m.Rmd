@@ -1,0 +1,229 @@
+---
+title: "Seurat CPU Harmonized — Mouse Brain 1.3M"
+output: html_document
+---
+
+**Run on Libra CPU. Estimated time: 6-12 hours. Run overnight.**
+
+```{r setup}
+suppressPackageStartupMessages({
+  library(Seurat)
+  library(Matrix)
+  library(jsonlite)
+  library(ggplot2)
+})
+
+cfg <- fromJSON("benchmark_config.json", simplifyVector = TRUE)
+gcfg <- cfg$global
+dcfg <- cfg$datasets$mouse_brain_1m
+prefix <- dcfg$pipeline_prefix
+timings <- list()
+
+out_prefix <- file.path("write", paste0(prefix, "_seurat_cpu_harmonized"))
+dir.create("write", showWarnings = FALSE, recursive = TRUE)
+
+cat("Dataset:", dcfg$name, "\n")
+```
+
+## Load canonical allowlists
+
+```{r allowlists}
+read_allowlist <- function(path) {
+  x <- readLines(path, warn = FALSE)
+  x[nzchar(x)]
+}
+allow_cells <- read_allowlist(dcfg$canonical_cells_txt)
+allow_genes <- read_allowlist(dcfg$canonical_genes_txt)
+cat("Canonical cells:", length(allow_cells), "\n")
+cat("Canonical genes:", length(allow_genes), "\n")
+```
+
+## Load counts via canonical h5ad (reticulate)
+
+```{r load, message=FALSE}
+t0 <- proc.time()
+
+reticulate::use_python(Sys.which("python"), required = FALSE)
+anndata <- reticulate::import("anndata")
+
+ad <- anndata$read_h5ad(dcfg$canonical_h5ad)
+
+layer_keys <- tryCatch(reticulate::py_to_r(ad$layers$keys()), error = function(e) character())
+if ("counts" %in% layer_keys) {
+  x <- ad$layers$get("counts")
+} else {
+  x <- ad$X
+}
+
+x <- x$transpose()$tocsc()
+p <- as.integer(reticulate::py_to_r(x$indptr))
+i <- as.integer(reticulate::py_to_r(x$indices))
+vals <- as.numeric(reticulate::py_to_r(x$data))
+dims <- as.integer(reticulate::py_to_r(x$shape))
+
+counts <- new("dgCMatrix", p = p, i = i, x = vals, Dim = dims)
+rownames(counts) <- make.unique(as.character(reticulate::py_to_r(ad$var_names$to_list())))
+colnames(counts) <- as.character(reticulate::py_to_r(ad$obs_names$to_list()))
+
+timings$load <- (proc.time() - t0)["elapsed"]
+cat("Loaded:", ncol(counts), "cells x", nrow(counts), "genes in", timings$load, "s\n")
+```
+
+## Subset to canonical
+
+```{r subset}
+common_genes <- intersect(allow_genes, rownames(counts))
+common_cells <- intersect(allow_cells, colnames(counts))
+counts <- counts[common_genes, common_cells, drop = FALSE]
+cat("After canonical subset:", ncol(counts), "cells x", nrow(counts), "genes\n")
+```
+
+## Create Seurat object
+
+```{r create}
+obj <- CreateSeuratObject(counts = counts, project = dcfg$name, min.cells = 0, min.features = 0)
+obj[["percent.mt"]] <- PercentageFeatureSet(obj, pattern = "^mt-")
+cat("Seurat object:", ncol(obj), "cells x", nrow(obj), "genes\n")
+```
+
+## Normalize
+
+```{r normalize}
+t0 <- proc.time()
+obj <- NormalizeData(obj, normalization.method = "LogNormalize", scale.factor = gcfg$target_sum, verbose = FALSE)
+timings$normalize <- (proc.time() - t0)["elapsed"]
+cat("Normalize:", timings$normalize, "s\n")
+```
+
+## HVG
+
+```{r hvg}
+t0 <- proc.time()
+obj <- FindVariableFeatures(obj, selection.method = "vst", nfeatures = dcfg$n_top_genes, verbose = FALSE)
+timings$hvg <- (proc.time() - t0)["elapsed"]
+cat("HVG:", length(VariableFeatures(obj)), "genes in", timings$hvg, "s\n")
+```
+
+## Scale
+
+```{r scale}
+t0 <- proc.time()
+obj <- ScaleData(obj, features = VariableFeatures(obj), verbose = FALSE)
+timings$scale <- (proc.time() - t0)["elapsed"]
+cat("ScaleData:", timings$scale, "s\n")
+```
+
+## PCA
+
+```{r pca}
+t0 <- proc.time()
+obj <- RunPCA(obj, features = VariableFeatures(obj), npcs = gcfg$pca_n_comps,
+              seed.use = gcfg$random_state, verbose = FALSE)
+timings$pca <- (proc.time() - t0)["elapsed"]
+cat("PCA:", timings$pca, "s\n")
+```
+
+## Neighbors
+
+```{r neighbors}
+t0 <- proc.time()
+graph_mode <- gcfg$seurat_graph_mode
+if (identical(graph_mode, "nn")) {
+  obj <- FindNeighbors(obj, reduction = "pca", dims = seq_len(dcfg$neighbors_n_pcs),
+                       k.param = dcfg$n_neighbors, return.neighbor = FALSE,
+                       compute.SNN = FALSE, nn.method = gcfg$seurat_nn_method,
+                       nn.eps = gcfg$seurat_nn_eps, graph.name = "RNA_nn", verbose = FALSE)
+  graph_for_clustering <- "RNA_nn"
+} else {
+  obj <- FindNeighbors(obj, reduction = "pca", dims = seq_len(dcfg$neighbors_n_pcs),
+                       k.param = dcfg$n_neighbors, return.neighbor = FALSE,
+                       compute.SNN = TRUE, prune.SNN = gcfg$seurat_prune_snn,
+                       nn.method = gcfg$seurat_nn_method, nn.eps = gcfg$seurat_nn_eps,
+                       graph.name = c("RNA_nn", "RNA_snn"), verbose = FALSE)
+  graph_for_clustering <- "RNA_snn"
+}
+timings$neighbors <- (proc.time() - t0)["elapsed"]
+cat("Neighbors:", timings$neighbors, "s\n")
+```
+
+## Leiden clustering
+
+```{r leiden}
+t0 <- proc.time()
+obj <- FindClusters(obj, graph.name = graph_for_clustering,
+                    resolution = dcfg$leiden_resolution, algorithm = 4,
+                    leiden_method = gcfg$seurat_leiden_method,
+                    n.start = gcfg$seurat_leiden_n_start,
+                    n.iter = gcfg$seurat_leiden_n_iter,
+                    random.seed = gcfg$random_state, verbose = FALSE)
+timings$leiden <- (proc.time() - t0)["elapsed"]
+n_clusters <- length(levels(Idents(obj)))
+cat("Leiden:", n_clusters, "clusters in", timings$leiden, "s\n")
+```
+
+## UMAP
+
+```{r umap}
+t0 <- proc.time()
+obj <- RunUMAP(obj, reduction = "pca", dims = seq_len(dcfg$neighbors_n_pcs),
+               umap.method = "uwot", n.neighbors = dcfg$n_neighbors,
+               metric = gcfg$neighbor_metric, min.dist = gcfg$umap_min_dist,
+               spread = gcfg$umap_spread, seed.use = gcfg$random_state, verbose = FALSE)
+timings$umap <- (proc.time() - t0)["elapsed"]
+cat("UMAP:", timings$umap, "s\n")
+```
+
+## Differential Expression
+
+```{r de}
+presto_installed <- requireNamespace("presto", quietly = TRUE)
+cat("Presto available:", presto_installed, "\n")
+
+t0 <- proc.time()
+markers <- FindAllMarkers(obj, only.pos = FALSE, test.use = "wilcox",
+                          min.pct = 0, logfc.threshold = 0, verbose = FALSE)
+timings$de <- (proc.time() - t0)["elapsed"]
+markers_filtered <- subset(markers, p_val_adj < 0.05 & avg_log2FC > 0.1)
+cat("DE:", nrow(markers), "total,", nrow(markers_filtered), "filtered in", timings$de, "s\n")
+```
+
+## Save outputs
+
+```{r save}
+write.csv(data.frame(barcode = colnames(obj), leiden = as.character(Idents(obj)),
+                     stringsAsFactors = FALSE),
+          paste0(out_prefix, "_clusters.csv"), row.names = FALSE)
+write.csv(markers, paste0(out_prefix, "_markers.csv"), row.names = FALSE)
+write.csv(markers_filtered, paste0(out_prefix, "_markers_filtered.csv"), row.names = FALSE)
+write.csv(data.frame(barcode = rownames(Embeddings(obj, "umap")),
+                     Embeddings(obj, "umap"), stringsAsFactors = FALSE),
+          paste0(out_prefix, "_umap.csv"), row.names = FALSE)
+write.csv(data.frame(gene = VariableFeatures(obj), stringsAsFactors = FALSE),
+          paste0(out_prefix, "_hvg.csv"), row.names = FALSE)
+
+spec <- list(
+  pipeline = "seurat_cpu_harmonized",
+  dataset = dcfg$name,
+  seurat_version = as.character(packageVersion("Seurat")),
+  presto_installed = presto_installed,
+  timings_seconds = timings,
+  results = list(
+    n_cells = ncol(obj),
+    n_genes = nrow(obj),
+    n_hvg = length(VariableFeatures(obj)),
+    n_clusters = n_clusters,
+    n_marker_rows = nrow(markers),
+    n_marker_rows_filtered = nrow(markers_filtered)
+  )
+)
+writeLines(toJSON(spec, pretty = TRUE, auto_unbox = TRUE), paste0(out_prefix, "_spec.json"))
+
+cat("\n=== Timings ===\n")
+total <- 0
+for (nm in names(timings)) {
+  cat(sprintf("  %-20s: %8.1f s\n", nm, timings[[nm]]))
+  total <- total + timings[[nm]]
+}
+cat(sprintf("  %-20s: %8.1f s (%.1f min)\n", "TOTAL", total, total / 60))
+cat("\nClusters:", n_clusters, "\n")
+```

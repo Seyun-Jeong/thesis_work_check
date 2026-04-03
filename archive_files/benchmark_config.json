@@ -1,0 +1,103 @@
+{
+  "global": {
+    "target_sum": 10000,
+    "pca_n_comps": 50,
+    "random_state": 0,
+    "neighbor_metric": "euclidean",
+    "neighbor_method": "umap",
+    "scanpy_leiden_flavor": "igraph",
+    "scanpy_leiden_n_iterations": -1,
+    "rsc_leiden_n_iterations": null,
+    "seurat_graph_mode": "nn",
+    "seurat_nn_method": "rann",
+    "seurat_nn_eps": 0.0,
+    "seurat_compute_snn": false,
+    "seurat_prune_snn": 0.0,
+    "seurat_leiden_method": "igraph",
+    "seurat_leiden_n_start": 1,
+    "seurat_leiden_n_iter": 10,
+    "de_method": "wilcoxon",
+    "de_corr_method": "benjamini-hochberg",
+    "umap_min_dist": 0.5,
+    "umap_spread": 1.0
+  },
+  "datasets": {
+    "pbmc3k": {
+      "name": "PBMC3k",
+      "input_type": "10x_mtx",
+      "input_path": "/home/sjeong7/thesis_work/harmonized_benchmark/data/hg19",
+      "pipeline_prefix": "pbmc3k",
+      "canonical_h5ad": "write/pbmc3k_canonical_filtered.h5ad",
+      "canonical_cells_txt": "write/pbmc3k_canonical_cells.txt",
+      "canonical_genes_txt": "write/pbmc3k_canonical_genes.txt",
+      "canonical_summary_json": "write/pbmc3k_canonical_summary.json",
+      "min_cells": 3,
+      "min_genes": 200,
+      "max_genes": 2500,
+      "max_pct_mt": 5.0,
+      "n_top_genes": 2000,
+      "neighbors_n_pcs": 10,
+      "n_neighbors": 15,
+      "leiden_resolution": 0.5,
+      "known_marker_sets": {
+        "CD4_T": ["CD3D", "CD3E", "IL7R", "LTB"],
+        "CD8_T": ["CD3D", "CD3E", "CD8A", "CD8B", "GZMK"],
+        "NK": ["GNLY", "NKG7", "KLRD1", "KLRB1"],
+        "B": ["CD79A", "CD79B", "MS4A1"],
+        "Monocyte": ["LYZ", "S100A8", "S100A9", "CD14"],
+        "DC": ["FCER1A", "CST3", "CLEC10A"],
+        "Platelet": ["PPBP", "PF4"]
+      }
+    },
+    "lung65k": {
+      "name": "Human Lung Cell 65K",
+      "input_type": "h5ad",
+      "input_path": "/home/sjeong7/thesis_work/harmonized_benchmark/data/krasnow_hlca_10x.sparse.h5ad",
+      "pipeline_prefix": "lung_65k",
+      "canonical_h5ad": "write/lung_65k_canonical_filtered.h5ad",
+      "canonical_cells_txt": "write/lung_65k_canonical_cells.txt",
+      "canonical_genes_txt": "write/lung_65k_canonical_genes.txt",
+      "canonical_summary_json": "write/lung_65k_canonical_summary.json",
+      "min_cells": 3,
+      "min_genes": 200,
+      "max_genes": 6000,
+      "max_pct_mt": null,
+      "n_top_genes": 5000,
+      "neighbors_n_pcs": 50,
+      "n_neighbors": 15,
+      "leiden_resolution": 1.0,
+      "known_marker_sets": {
+        "Epithelial": ["EPCAM", "KRT18", "KRT19"],
+        "Endothelial": ["PECAM1", "VWF", "CDH5"],
+        "Immune": ["PTPRC", "CD3D", "CD68"],
+        "Fibroblast": ["COL1A1", "DCN", "LUM"]
+      }
+    },
+    "mouse_brain_1m": {
+      "name": "Mouse Brain 1.3M",
+      "input_type": "h5ad",
+      "input_path": "/home/sjeong7/thesis_work/harmonized_benchmark/data/1M_brain_cells_10X.sparse.h5ad",
+      "pipeline_prefix": "mouse_1m",
+      "canonical_h5ad": "write/mouse_1m_canonical_filtered.h5ad",
+      "canonical_cells_txt": "write/mouse_1m_canonical_cells.txt",
+      "canonical_genes_txt": "write/mouse_1m_canonical_genes.txt",
+      "canonical_summary_json": "write/mouse_1m_canonical_summary.json",
+      "min_cells": 3,
+      "min_genes": 200,
+      "max_genes": 10000,
+      "max_pct_mt": 5.0,
+      "n_top_genes": 5000,
+      "neighbors_n_pcs": 50,
+      "n_neighbors": 15,
+      "leiden_resolution": 1.0,
+      "known_marker_sets": {
+        "Excitatory_neuron": ["Slc17a7", "Neurod6", "Satb2"],
+        "Inhibitory_neuron": ["Gad1", "Gad2", "Slc32a1"],
+        "Astrocyte": ["Aqp4", "Gfap", "Aldh1l1"],
+        "Oligodendrocyte": ["Mbp", "Plp1", "Mog"],
+        "Microglia": ["Cx3cr1", "P2ry12", "Csf1r"],
+        "Endothelial": ["Pecam1", "Cldn5", "Flt1"]
+      }
+    }
+  }
+}

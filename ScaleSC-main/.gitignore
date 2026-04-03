@@ -1,0 +1,8 @@
+*/__pycache__/
+build/
+dist/
+scalesc.egg-info/
+html/
+test*/
+.ipynb_checkpoints/
+Test.ipynb
